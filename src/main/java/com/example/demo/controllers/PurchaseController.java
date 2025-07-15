@@ -21,21 +21,18 @@ public class PurchaseController {
     @PostMapping("/buyProduct")
     public String buyProduct(@RequestParam("productId") Long id,
                              RedirectAttributes redirectAttrs) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            if (product.getInv() > 0) {
-                product.setInv(product.getInv() - 1);
-                productRepository.save(product);
-                redirectAttrs.addFlashAttribute("message",
-                        "Successfully purchased: " + product.getName());
+        Optional<Product> opt = productRepository.findById(id);
+        if (opt.isPresent()) {
+            Product p = opt.get();
+            if (p.getInv() > 0) {
+                p.setInv(p.getInv() - 1);
+                productRepository.save(p);
+                redirectAttrs.addFlashAttribute("message", "Purchased \"" + p.getName() + "\" successfully");
             } else {
-                redirectAttrs.addFlashAttribute("error",
-                        "Sorry, “" + product.getName() + "” is out of stock.");
+                redirectAttrs.addFlashAttribute("error", "Sorry, \"" + p.getName() + "\" is out of stock");
             }
         } else {
-            redirectAttrs.addFlashAttribute("error",
-                    "Product not found for ID: " + id);
+            redirectAttrs.addFlashAttribute("error", "Product not found (ID: " + id + ")");
         }
         return "redirect:/";
     }
