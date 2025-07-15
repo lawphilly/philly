@@ -34,6 +34,6 @@ public class PurchaseController {
         } else {
             redirectAttrs.addFlashAttribute("error", "Product not found (ID: " + id + ")");
         }
-        return "redirect:/";
+        return "redirect:/mainscreen";
     }
 }
